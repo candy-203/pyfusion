@@ -1,9 +1,9 @@
 from pyfusion.utils import structs, operations
 
 
-def step(image: structs.Image, dmri: structs.TensorField, step_size: float) -> structs.Image:
+def step(image: structs.Image, tensor_field: structs.TensorField, step_size: float) -> structs.Image:
     """
-    Perform a single step of diffusion using the diffusion tensor.
+    Perform a single step of diffusion using a tensor field.
 
     Args:
         image (structs.Image): The input image.
@@ -17,7 +17,7 @@ def step(image: structs.Image, dmri: structs.TensorField, step_size: float) -> s
     grad = operations.nabla(image)
 
     # Apply the diffusion tensor to the gradient
-    grad_tensor = operations.apply_tensor_field(dmri, grad)
+    grad_tensor = operations.apply_tensor_field(tensor_field, grad)
 
     # Calculate the divergence of the resulting vector field
     div = operations.divergence(grad_tensor)
