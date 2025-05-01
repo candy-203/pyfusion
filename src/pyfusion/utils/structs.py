@@ -17,6 +17,7 @@ class NPBaseModel(BaseModel):
     A custom base model that allows for arbitrary types in its configuration.
     This is useful for numpy arrays and other types that are not natively supported by Pydantic.
     """
+
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
@@ -76,6 +77,7 @@ class EigenDecomp(NPBaseModel):
     """
     A class representing the eigen decomposition of a 2x2 matrix field.
     """
+
     eigen_1: Eigen
     eigen_2: Eigen
 
@@ -96,7 +98,6 @@ class Eigen3D(NPBaseModel):
     @model_validator(mode="after")
     def check_dimensions(self) -> Self:
         check_dimensions(2, self.eigvec, self.eigval)
-
         return self
 
 
@@ -104,6 +105,7 @@ class EigenDecomp3D(NPBaseModel):
     """
     A class representing the eigen decomposition of a 3x3 matrix field.
     """
+
     eigen_1: Eigen3D
     eigen_2: Eigen3D
     eigen_3: Eigen3D
