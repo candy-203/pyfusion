@@ -1,9 +1,9 @@
 import numpy as np
 
-from pyfusion.utils import structs
+from pyfusion.structs import math
 
 
-def calculate_eigen(eigen_decom: structs.EigenDecomp) -> structs.TensorField:
+def calculate_eigen(eigen_decom: math.EigenDecomp) -> math.TensorField:
     """
     Calculate the tensor field from the eigen decomposition.
 
@@ -24,10 +24,10 @@ def calculate_eigen(eigen_decom: structs.EigenDecomp) -> structs.TensorField:
 
     tensor_field = np.matmul(V_scaled, np.swapaxes(V, -1, -2))
 
-    return structs.TensorField(data=tensor_field)
+    return math.TensorField(data=tensor_field)
 
 
-def calculate_eigen3d(eigen_decom: structs.EigenDecomp3D) -> structs.TensorField:
+def calculate_eigen3d(eigen_decom: math.EigenDecomp3D) -> math.TensorField:
     """
     Calculate the tensor field from the eigen decomposition. Projecting the 3D eigenvectors to x-y-plane.
 
@@ -49,4 +49,19 @@ def calculate_eigen3d(eigen_decom: structs.EigenDecomp3D) -> structs.TensorField
 
     tensor_field = np.matmul(V_scaled, np.swapaxes(V, -1, -2))
 
-    return structs.TensorField(data=tensor_field)
+    return math.TensorField(data=tensor_field)
+
+
+def calculate_decomposition(tensor_field: math.TensorField) -> math.EigenDecomp:
+    """
+    Calculate the eigen decomposition of a tensor field.
+
+    Args:
+        tensor_field (structs.TensorField): The tensor field.
+
+    Returns:
+        structs.EigenDecomp: The resulting eigen decomposition.
+    """
+    eigval, eigvec = np.linalg.eigh(tensor_field.data)
+    return math.EigenDecomp(eigen_1=math.Eigen(eigvec=eigvec[..., 0], eigval=eigval[..., 0]),
+                            eigen_2=math.Eigen(eigvec=eigvec[..., 1], eigval=eigval[..., 1]))

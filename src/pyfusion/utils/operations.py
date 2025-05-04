@@ -1,9 +1,9 @@
 import numpy as np
 
-from pyfusion.utils import structs as structs
+from pyfusion.structs import math as math
 
 
-def nabla(image: structs.Image) -> structs.VectorField:
+def nabla(image: math.Image) -> math.VectorField:
     """
     Calculate the gradient of a 2D image using central differences.
 
@@ -16,10 +16,10 @@ def nabla(image: structs.Image) -> structs.VectorField:
     """
     grad = np.gradient(image.data, edge_order=1)
     grad = np.stack(grad, axis=-1)
-    return structs.VectorField(data=grad)
+    return math.VectorField(data=grad)
 
 
-def apply_tensor(tensor: structs.Tensor, vector_field: structs.VectorField) -> structs.VectorField:
+def apply_tensor(tensor: math.Tensor, vector_field: math.VectorField) -> math.VectorField:
     """
     Apply a 2x2 tensor to a 2D vector field.
 
@@ -30,11 +30,11 @@ def apply_tensor(tensor: structs.Tensor, vector_field: structs.VectorField) -> s
     Returns:
         structs.VectorField: The resulting vector field.
     """
-    res: structs.FloatArr = np.tensordot(vector_field.data, tensor.data, axes=(1))  # type: ignore
-    return structs.VectorField(data=res)
+    res: math.FloatArr = np.tensordot(vector_field.data, tensor.data, axes=(1))  # type: ignore
+    return math.VectorField(data=res)
 
 
-def apply_tensor_field(tensor_field: structs.TensorField, vector_field: structs.VectorField) -> structs.VectorField:
+def apply_tensor_field(tensor_field: math.TensorField, vector_field: math.VectorField) -> math.VectorField:
     """
     Apply a 2x2 tensor field to a 2D vector field.
 
@@ -50,11 +50,11 @@ def apply_tensor_field(tensor_field: structs.TensorField, vector_field: structs.
         raise ValueError(
             f"Tensor field and vector field must have the same spatial dimensions. I recieived: {tensor_field.data.shape[:2]} and {vector_field.data.shape[:2]}"
         )
-    res: structs.FloatArr = np.matmul(tensor_field.data, vector_field.data[..., None])[..., 0]
-    return structs.VectorField(data=res)
+    res: math.FloatArr = np.matmul(tensor_field.data, vector_field.data[..., None])[..., 0]
+    return math.VectorField(data=res)
 
 
-def divergence(vector_field: structs.VectorField) -> structs.Image:
+def divergence(vector_field: math.VectorField) -> math.Image:
     """
     Calculate the divergence of a 2D vector field using central differences.
 
@@ -66,10 +66,10 @@ def divergence(vector_field: structs.VectorField) -> structs.Image:
     """
     x_grad = np.gradient(vector_field.data[..., 0], axis=1)
     y_grad = np.gradient(vector_field.data[..., 1], axis=0)
-    return structs.Image(data=x_grad + y_grad)
+    return math.Image(data=x_grad + y_grad)
 
 
-def structure_tensor(image: structs.Image) -> structs.TensorField:
+def structure_tensor(image: math.Image) -> math.TensorField:
     """
     Calculate the structure tensor of a 2D image.
 
@@ -81,4 +81,4 @@ def structure_tensor(image: structs.Image) -> structs.TensorField:
     """
     grad = nabla(image)
     tensor = grad.data[..., :, None] @ grad.data[..., None, :]  # v @ v^T of each vector
-    return structs.TensorField(data=tensor)
+    return math.TensorField(data=tensor)
