@@ -6,7 +6,7 @@ from pyfusion.structs import math
 from pyfusion.utils import operations, projection
 
 
-def step(image: math.Image, tensor_field: math.TensorField, step_size: float) -> math.Image:
+def step(image: math.Image, tensor_field: math.TensorField, step_size: float, sigma: float) -> math.Image:
     """
     Perform a single step of diffusion using a tensor field.
 
@@ -14,12 +14,14 @@ def step(image: math.Image, tensor_field: math.TensorField, step_size: float) ->
         image (structs.Image): The input image.
         dmri (structs.TensorField): The diffusion tensor field.
         step_size (float): The step size for the diffusion.
+        sigma (float): The standard deviation for Gaussian smoothing.
 
     Returns:
         structs.Image: The resulting image after diffusion.
     """
-    # Calculate the gradient of the image
-    grad = operations.nabla(image)
+    smoothed_image = operations.smooth(image, sigma)
+    # Calculate the gradient of the smoothed image
+    grad = operations.nabla(smoothed_image)
 
     # Apply the diffusion tensor to the gradient
     grad_tensor = operations.apply_tensor_field(tensor_field, grad)

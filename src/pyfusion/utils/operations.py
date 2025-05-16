@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.ndimage import gaussian_filter   # type: ignore
 
 from pyfusion.structs import math as math
 
@@ -82,3 +83,18 @@ def structure_tensor(image: math.Image) -> math.TensorField:
     grad = nabla(image)
     tensor = grad.data[..., :, None] @ grad.data[..., None, :]  # v @ v^T of each vector
     return math.TensorField(data=tensor)
+
+
+def smooth(image: math.Image, sigma: float) -> math.Image:
+    """
+    Smooth a 2D image using a Gaussian filter.
+
+    Args:
+        image (structs.Image): The input image.
+        sigma (float): The standard deviation of the Gaussian filter.
+
+    Returns:
+        structs.Image: The smoothed image.
+    """
+    smoothed_data = gaussian_filter(image.data, sigma=sigma)    # type: ignore
+    return math.Image(data=smoothed_data)   # type: ignore

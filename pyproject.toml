@@ -12,7 +12,8 @@ dependencies = [
     "pydantic (>=2.11.3,<3.0.0)",
     "pytest (>=8.3.5,<9.0.0)",
     "nibabel (>=5.3.2,<6.0.0)",
-    "matplotlib (>=3.10.1,<4.0.0)"
+    "matplotlib (>=3.10.1,<4.0.0)",
+    "scipy (>=1.15.3,<2.0.0)"
 ]
 
 [tool.poetry]
