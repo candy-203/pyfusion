@@ -11,9 +11,3 @@ Next set up a virtual enviorment with:
 ```bash
 poetry install
 ```
-
-Now you can run the cli (not ready yet xD) via:
-
-```bash
-poetry run pyfusion 
-```
