@@ -57,7 +57,7 @@ def plot_with_vector_field(img, vector_field, figsize: tuple[int, int] = (10, 8)
     :param _type_ vector_field: The vector field data to overlay
     :param tuple[int, int] figsize: The figure size in inches, defaults to (10, 8)
     :param str | None title: The title to display, empty when None, defaults to None
-    """    
+    """
     n, m = img.shape
     Y, X = np.mgrid[0:n, 0:m]
 
@@ -78,5 +78,6 @@ def plot_with_vector_field(img, vector_field, figsize: tuple[int, int] = (10, 8)
     plt.figure(figsize=(8, 8))
     plt.imshow(img, cmap='gray' if img.ndim == 2 else None, origin='upper')
     plt.quiver(Xf, Yf, Uf, Vf, color=Cf, angles='xy', scale_units='xy', scale=1.0)
+    # plt.gca().invert_yaxis()
     plt.axis('off')
     plt.show()

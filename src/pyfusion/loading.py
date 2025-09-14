@@ -3,6 +3,7 @@
 import os
 
 import nibabel as nib
+import numpy as np
 
 from pyfusion._format_validation import FSL
 
@@ -36,6 +37,15 @@ def load_fsl(dir: str, slice: int, image_file: str = "FA") -> FSL:
     V1 = nib.load(os.path.join(dir, "V1.nii.gz")).get_fdata()
     V2 = nib.load(os.path.join(dir, "V2.nii.gz")).get_fdata()
     V3 = nib.load(os.path.join(dir, "V3.nii.gz")).get_fdata()
+
+    #rotate the data to match the convention used in neuroimaging
+    FA = np.rot90(FA)
+    L1 = np.rot90(L1)
+    L2 = np.rot90(L2)
+    L3 = np.rot90(L3)
+    V1 = np.rot90(V1, axes=(0, 1))
+    V2 = np.rot90(V2, axes=(0, 1))
+    V3 = np.rot90(V3, axes=(0, 1))
 
     # Check if the slice index is within the bounds of the data
     if slice >= FA.shape[2]:
